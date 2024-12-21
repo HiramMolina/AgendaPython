@@ -1,15 +1,3 @@
-def vermenu():
-    print("""
-          
-          """)
-    print("\nAgenda:")
-    print("1. Agregar contacto")
-    print("2. Buscar contacto")
-    print("3. Mostrar todos los contactos")
-    print("4. Eliminar contacto")
-    print("5. Salir\n")
-
-# vermenu()
 
 # Agregar contacto
 def agregarCont():
@@ -42,31 +30,91 @@ def buscarCont():
         print(f"No se encontró ningún contacto con el nombre '{nombre}'.")
     # Cerramos el archivo porque ya no lo necesitamos. Esto es muy importante.
     archivo.close()
-
-buscarCont()
-
 # Mostrar todos los contactos
 def mostrarCont():
     archivo = open('agenda.txt' , 'r')
     registros = archivo.read()
+    print("""
+          
+    * Contactos *
+          
+          """)
     print(registros)
+    print("""
+          
+    * Fin de la lista. *
+          
+          """)
 
 def eliminarCont():
     mostrarCont()
     nombre = input("Nombre del contacto por eliminar: ")
-    archivo = open("agenda.txt", "r")
+    with open("agenda.txt", "r") as archivo:
+        lineas = archivo.readlines()
 
     encontrado = False
+    nuevas_lineas =  []
 
-    for linea in archivo:
+    for linea in lineas:
         if nombre.lower() in linea.lower():
-            print("Contacto encontrado y eliminado.")
+            print("Contacto encontrado")
             encontrado = True
-            break
-    if not encontrado:
-        print("No se encontró ningun contacto con ese nombre.")
-    archivo.close()
+        else: 
+            nuevas_lineas.append(linea)
+            print("Entra else")
+        
+        if encontrado:
+            with open ("agenda.txt" , "w") as archivo:
+                archivo.writelines(nuevas_lineas)
+                # print(f"El contacto '{nombre}' ha sido eliminado.")
+    else:
+            print(f"No se encontró nigun contacto con el nombre '{nombre}'.")
 
+def menu():
+    print("""
+            Bienvenido a mi agenda en Python.
+            """)
+    print("\nSeleccione una opción:\n")
+    print("1. Agregar contacto")
+    print("2. Buscar contacto")
+    print("3. Mostrar todos los contactos")
+    print("4. Eliminar contacto")
+    print("5. Salir\n")
+
+#############################
+
+print("""
+        Bienvenido a mi agenda en Python.
+        """)
+print("\nSeleccione una opción:\n")
+print("1. Agregar contacto")
+print("2. Buscar contacto")
+print("3. Mostrar todos los contactos")
+print("4. Eliminar contacto")
+print("5. Salir\n")
+
+eleccion = 0
+
+diccionario = {
+    1: agregarCont,
+    2: buscarCont,
+    3: mostrarCont,
+    4: eliminarCont
+}
+
+while True:
+    
+    try:
+        # menu()
+        eleccion = int(input("Ingresar a opción: "))
+        if eleccion < 1 or eleccion > 5:
+            print("Ingrese un numero valido.")
+        else:
+            eleccion = diccionario[eleccion]()
+            print("Listo!\n")
+    except ValueError:
+        print ("No sea estupido, ingrese un valor numerico del 1 al 4.")
+        
 
 
 
